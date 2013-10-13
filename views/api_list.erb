@@ -4,7 +4,7 @@
       <li class="<%= endpoint == current ? 'active' : '' %>">
       <a href="/admin/<%= endpoint.id %>">
         <div class="label-api label-api-full">
-          <span class="text text-danger"><%= endpoint.method.upcase %></span>
+          <span class="label label-danger"><%= endpoint.method.upcase %></span>
           <strong><%= endpoint.pattern %></strong>
         </div>
       </a>

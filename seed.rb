@@ -7,7 +7,11 @@ config['endpoints'].each do |endpoint, options|
 
   raise "Invalid or missing HTTP verb for endpoint #{endpoint}" unless VALID_HTTP_VERBS.include?(method)
 
-  ep = ApiMockServer::Endpoint.find_or_initialize_by(method: method, pattern: endpoint, response: options['response'], status: (options['status']||200).to_i)
+  ep = ApiMockServer::Endpoint.find_or_initialize_by(method: method, 
+                                                     pattern: endpoint, 
+                                                     response: options['response'], 
+                                                     status: (options['status']||200).to_i,
+                                                     params: options['params'])
 
   ep.save!
 end

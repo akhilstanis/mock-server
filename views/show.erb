@@ -14,12 +14,21 @@
     </li>
   </ul>
 
+  <div class="well">
+    <div>Params</div>
+    <ul class='col-lg-offset-0'>
+      <% @route.params.each do |key, value| %>
+ <li><span class='col-lg-4'><strong><%= key %>:</strong></span><span class='col-lg-8'><%= value %></span></li>
+      <% end %>
+    </ul>
+  </div>
+
   <div id="show-api-response-div" class="well">
     <ul class="nav nav-tabs">
       <li class="nav-label">Response</li>
     </ul>
-    <pre class="prettyprint" ref="response-json">
-      <%= @route.response %>
+    <pre class="prettyprint" ref="response-json" data-response="<%= @route.response %>">
+     <%= @route.response %>
     </pre>
   </div>
   </div>

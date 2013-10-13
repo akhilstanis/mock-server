@@ -13,12 +13,13 @@ module ApiMockServer
     field :pattern, type: String
     field :response, type: String
     field :status, type: Integer
+    field :params, type: Hash
 
   end
 
   class App < Sinatra::Base
     # for partial
-    binding.pry
+    #binding.pry
     register Sinatra::Partial
 
     Mongoid.load!("mongoid.yml")
@@ -34,6 +35,17 @@ module ApiMockServer
 
     get "/admin/:id" do
       @route = Endpoint.find params[:id]
+      erb :show
+    end
+
+    get "/admin/new" do
+      @route = Endpoint.new
+      erb :new
+    end
+
+    post "/admin/new" do
+      @route = Endpoint.new(params[:route])
+      @route.save
       erb :show
     end
 
