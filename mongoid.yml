@@ -1,0 +1,6 @@
+development:
+  sessions:
+    default:
+      database: api-mock
+      hosts:
+        - localhost:27017
