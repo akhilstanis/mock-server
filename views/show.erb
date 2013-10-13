@@ -1,0 +1,27 @@
+<div id="main-container" class="row">
+<div id="list-api-div" class="col-md-5">
+<%= partial :api_list, locals: { current: @route } %>
+</div>
+
+<div id="show-api-div" class="col-md-7">
+    <div class="div-container">
+<ul class="breadcrumb">
+  <li>
+    <a href="/admin/<%= @route.id %>">
+      <span class="text text-danger"><%= @route.method.upcase %></span>
+      <strong><%= @route.pattern %></strong>
+  </a>
+  </li>
+</ul>
+
+<div id="show-api-response-div" class="well">
+  <ul class="nav nav-tabs">
+    <li class="nav-label">Response</li>
+  </ul>
+  <pre class="prettyprint" ref="response-json">
+    <%= @route.response %>
+  </pre>
+</div>
+</div>
+</div>
+</div>

@@ -1,0 +1,14 @@
+<div class="div-container">
+  <ul class="well nav nav-pills nav-stacked">
+    <% Endpoint.each do |endpoint| %>
+      <li class="<%= endpoint == current ? 'active' : '' %>">
+      <a href="/admin/<%= endpoint.id %>">
+        <div class="label-api label-api-full">
+          <span class="text text-danger"><%= endpoint.method.upcase %></span>
+          <strong><%= endpoint.pattern %></strong>
+        </div>
+      </a>
+      </li>
+    <% end %>
+  </ul>
+</div>

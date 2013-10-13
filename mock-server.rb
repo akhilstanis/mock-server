@@ -3,7 +3,9 @@ require 'json'
 require 'yaml'
 require 'mongoid'
 require 'pry'
+require 'sinatra/partial'
 
+set :partial_template_engine, :erb
 Mongoid.load!("mongoid.yml")
 
 class Endpoint
@@ -30,6 +32,14 @@ config['endpoints'].each do |endpoint, options|
   ep.save!
 end
 
+get "/admin" do
+  erb :index
+end
+
+get "/admin/:id" do
+  @route = Endpoint.find params[:id]
+  erb :show
+end
 
 Endpoint.each do |endpoint|
   send(endpoint.method, endpoint.pattern) do
