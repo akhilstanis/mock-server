@@ -1,5 +1,6 @@
 source :rubygems
 
+gem 'rack'
 gem 'sinatra'
 gem "mongoid"
 gem "sinatra-partial"

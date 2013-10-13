@@ -42,5 +42,6 @@ PLATFORMS
 DEPENDENCIES
   mongoid
   pry
+  rack
   sinatra
   sinatra-partial
