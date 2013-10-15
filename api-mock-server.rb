@@ -25,7 +25,7 @@ module ApiMockServer
     Mongoid.load!("mongoid.yml")
 
     set :partial_template_engine, :erb
-    
+
     # remove it
     require 'seed'
 
@@ -33,29 +33,36 @@ module ApiMockServer
       erb :index
     end
 
+    get "/admin/new" do
+      #@route = Endpoint.new
+      erb :new
+    end
+
+    post "/admin/new" do
+      ps ||= {}
+      params["params_key"].each_with_index do |params_name, index|
+        ps[params_name] = params["params_value"][index]
+      end
+      @route = Endpoint.create(method: params["method"],
+                               pattern: params["pattern"],
+                               status: params["status"] || 200,
+                               response: params["response"],
+                               params: ps)
+      erb :show
+    end
+
     get "/admin/:id" do
       @route = Endpoint.find params[:id]
       erb :show
     end
 
-    get "/admin/new" do
-      @route = Endpoint.new
-      erb :new
-    end
-
-    post "/admin/new" do
-      @route = Endpoint.new(params[:route])
-      @route.save
-      erb :show
-    end
-
-    Endpoint.each do |endpoint|
-      send(endpoint.method, endpoint.pattern) do
-        content_type :json
-        status endpoint.status
-        endpoint.response
-      end
-    end
+    #Endpoint.each do |endpoint|
+      #send(endpoint.method, endpoint.pattern) do
+        #content_type :json
+        #status endpoint.status
+        #endpoint.response
+      #end
+    #end
   end
 
 end

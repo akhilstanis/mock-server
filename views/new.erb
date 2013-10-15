@@ -4,6 +4,52 @@
   </div>
 
   <div id="show-api-div" class="col-md-7">
+    <form action="/admin/new", method="post", class="form-horizontal">
+      <div class='form-group well'>
+        <label class="col-lg-2 control-label">URL</label>
+        <div class='col-lg-10 row'>
+          <div class='col-lg-4'>
+            <select class='form-control' name="method">
+              <option value='' selected>SELECT METHOD</option>
+              <option value='GET'>GET</option>
+              <option value='POST'>POST</option>
+              <option value='DELETE'>DELETE</option>
+            </select>
+          </div>
+          <div class='col-lg-8'>
+            <input type="text" placeholder="URL" class='form-control' name="pattern"></input>
+          </div>
+        </div>
+      </div>
+      <div class='form-group well'>
+        <label class='col-lg-2 control-label'>Parameters</label>
+        <div class='col-lg-10'>
+          <div class='col-lg-4'>
+            <input type="text" placeholder="NAME" class="form-control" name="params_key[]"></input>
+          </div>
+          <div class='col-lg-8'>
+            <input type="text" placeholder="VALUE" class="form-control" name="params_value[]"></input>
+          </div>
+        </div>
+      </div>
+      <div class="form-group well">
+        <label class='col-lg-2 control-label'>STATUS</label>
+        <div class='col-lg-3'>
+          <input type='text' placeholder='200' class='form-control' name='status'>
+        </div>
+      </div>
+      <div class="form-group well">
+        <label class='col-lg-2 control-label'>Response</label>
+        <div class='col-lg-10'>
+          <textarea placeholder='ONLY SUPPORT JSON FORMAT' class='form-control' cols='10' rows='20' name="response"></textarea>
+        </div>
+      </div>
 
+      <div class="form-group">
+        <div class="col-lg-offset-2 col-lg-10">
+          <button type="submit" class="btn btn-primary">创建这个 API</button>
+        </div>
+      </div>
+    </form>
   </div>
 </div>
