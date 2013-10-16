@@ -1,8 +1,5 @@
-require 'sinatra/base'
-require 'pry'
 require 'json'
-require 'sinatra/partial'
-require 'mongoid'
+require 'reloader'
 
 module ApiMockServer
 
@@ -17,14 +14,35 @@ module ApiMockServer
 
   end
 
+  #class ApiApp < Sinatra::Base
+    #Endpoint.each do |endpoint|
+      #send(endpoint.method.downcase, endpoint.pattern) do
+        #content_type :json
+        #status endpoint.status
+        #endpoint.response
+      #end
+    #end
+  #end
+
   class App < Sinatra::Base
     # for partial
     #binding.pry
     register Sinatra::Partial
+    use Rack::Reloader
 
-    Mongoid.load!("mongoid.yml")
+    configure :development do
+      set :partial_template_engine, :erb
 
-    set :partial_template_engine, :erb
+      #Mongoid.configure do |config|
+        #name = "api-mock"
+        #host = "localhost"
+        #config.master = Mongo::Connection.new.db(name)
+        ##config.logger = Logger.new($stdout, :warn) 
+        #config.logger = logger
+        #config.persist_in_safe_mode = false
+      #end
+      Mongoid.load!("mongoid.yml")
+    end
 
     # remove it
     require 'seed'
@@ -57,6 +75,7 @@ module ApiMockServer
     end
 
     #binding.pry
+    #use ApiAPP
     Endpoint.each do |endpoint|
       send(endpoint.method.downcase, endpoint.pattern) do
         content_type :json
