@@ -56,13 +56,15 @@ module ApiMockServer
       erb :show
     end
 
-    #Endpoint.each do |endpoint|
-      #send(endpoint.method, endpoint.pattern) do
-        #content_type :json
-        #status endpoint.status
-        #endpoint.response
-      #end
-    #end
+    #binding.pry
+    Endpoint.each do |endpoint|
+      send(endpoint.method.downcase, endpoint.pattern) do
+        content_type :json
+        status endpoint.status
+        endpoint.response
+      end
+    end
+    #binding.pry
   end
 
 end
