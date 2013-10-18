@@ -1,3 +1,3 @@
 jQuery(function($) {
-  $(".prettyprint").text(JSON.stringify(JSON.parse($(".prettyprint").data("response")), null, 2))
+  $(".prettyprint").text(JSON.stringify(JSON.parse($(".prettyprint").text()), null, 2))
 })

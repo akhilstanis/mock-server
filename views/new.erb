@@ -4,20 +4,26 @@
   </div>
 
   <div id="show-api-div" class="col-md-7">
+    <% if @error.present? %>
+      <div class='alert alert-danger'>
+        <%= @error.join("<br/>") %>
+      </div>
+    <% end %>
     <form action="/admin/new", method="post", class="form-horizontal">
       <div class='form-group well'>
         <label class="col-lg-2 control-label">URL</label>
         <div class='col-lg-10 row'>
           <div class='col-lg-4'>
-            <select class='form-control' name="method">
-              <option value='' selected>SELECT METHOD</option>
-              <option value='GET'>GET</option>
-              <option value='POST'>POST</option>
-              <option value='DELETE'>DELETE</option>
+            <select class='form-control' name="verb">
+              <% p @route.verb, @route.pattern, @route.status, @route.response, @route.params %>
+              <option value='' <%= @route.verb? ? "" : "selected" %>>SELECT VERB</option>
+              <% ApiMockServer::Endpoint::VALID_HTTP_VERBS.each do |verb| %>
+                <option value='<%= verb %>' <%= @route.verb == verb ? "selected" : "" %> ><%= verb.upcase %></option>
+              <% end %>
             </select>
           </div>
           <div class='col-lg-8'>
-            <input type="text" placeholder="URL" class='form-control' name="pattern"></input>
+            <input type="text" placeholder="URL" class='form-control' name="pattern" value='<%= @route.pattern %>'></input>
           </div>
         </div>
       </div>
@@ -35,13 +41,15 @@
       <div class="form-group well">
         <label class='col-lg-2 control-label'>STATUS</label>
         <div class='col-lg-3'>
-          <input type='text' placeholder='200' class='form-control' name='status'>
+          <input type='text' placeholder='200' class='form-control' name='status' value='<%= @route.status %>'>
         </div>
       </div>
       <div class="form-group well">
         <label class='col-lg-2 control-label'>Response</label>
         <div class='col-lg-10'>
-          <textarea placeholder='ONLY SUPPORT JSON FORMAT' class='form-control' cols='10' rows='20' name="response"></textarea>
+          <textarea placeholder='ONLY SUPPORT JSON FORMAT' class='prettyprint form-control' cols='10' rows='20' name="response">
+            <%= @route.response %>
+          </textarea>
         </div>
       </div>
 

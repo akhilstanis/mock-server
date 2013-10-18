@@ -5,40 +5,27 @@ module ApiMockServer
   class Endpoint
     include Mongoid::Document
 
-    field :method, type: String
+    field :verb, type: String
     field :pattern, type: String
     field :response, type: String
     field :status, type: Integer
     field :params, type: Hash
 
+    VALID_HTTP_VERBS = %w{get post put delete patch}
+
+    validates_presence_of :response, :status, message: "不能为空"
+    validates_inclusion_of :verb, in: VALID_HTTP_VERBS , message: "目前只支持以下方法: #{VALID_HTTP_VERBS.join(", ")}"
+    validates_format_of :pattern, with: /\A\/\S*\Z/, message: "必须为 / 开头的合法 url"
+    validates_uniqueness_of :pattern, scope: [:verb], message: "和 verbs 该组合已经存在"
+
   end
 
-  #class ApiApp < Sinatra::Base
-    #Endpoint.each do |endpoint|
-      #send(endpoint.method.downcase, endpoint.pattern) do
-        #content_type :json
-        #status endpoint.status
-        #endpoint.response
-      #end
-    #end
-  #end
-
   class App < Sinatra::Base
-    # for partial
-    #binding.pry
     register Sinatra::Partial
 
     configure :development do
       set :partial_template_engine, :erb
 
-      #Mongoid.configure do |config|
-        #name = "api-mock"
-        #host = "localhost"
-        #config.master = Mongo::Connection.new.db(name)
-        ##config.logger = Logger.new($stdout, :warn) 
-        #config.logger = logger
-        #config.persist_in_safe_mode = false
-      #end
       Mongoid.load!("mongoid.yml")
     end
 
@@ -58,7 +45,7 @@ module ApiMockServer
     end
 
     get "/admin/new" do
-      #@route = Endpoint.new
+      @route = Endpoint.new
       erb :new
     end
 
@@ -67,13 +54,18 @@ module ApiMockServer
       params["params_key"].each_with_index do |params_name, index|
         ps[params_name] = params["params_value"][index]
       end
-      @route = Endpoint.create(method: params["method"],
-                               pattern: params["pattern"],
-                               status: params["status"] || 200,
-                               response: params["response"],
-                               params: ps)
-      restart_server
-      erb :show
+      @route = Endpoint.new(verb: params["verb"],
+                            pattern: params["pattern"],
+                            status: params["status"].blank? ? 200 : params["status"].to_i,
+                            response: params["response"],
+                            params: ps)
+      if @route.save
+        restart_server
+        erb :show
+      else
+        @error = @route.errors.full_messages
+        erb :new
+      end
     end
 
     get "/admin/:id" do
@@ -84,7 +76,9 @@ module ApiMockServer
     #binding.pry
     #use ApiAPP
     Endpoint.each do |endpoint|
-      send(endpoint.method.downcase, endpoint.pattern) do
+      p endpoint
+      #binding.pry
+      send(endpoint.verb, endpoint.pattern) do
         content_type :json
         status endpoint.status
         endpoint.response

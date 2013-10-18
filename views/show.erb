@@ -4,34 +4,34 @@
   </div>
 
   <div id="show-api-div" class="col-md-7">
-      <div class="div-container">
-  <ul class="breadcrumb">
-    <li>
-      <a href="/admin/<%= @route.id %>">
-        <span class="text text-danger"><%= @route.method.upcase %></span>
-        <strong><%= @route.pattern %></strong>
-    </a>
-    </li>
-  </ul>
+    <div class="div-container">
+      <ul class="breadcrumb">
+        <li>
+          <a href="/admin/<%= @route.id %>">
+            <span class="text text-danger"><%= @route.verb.upcase %></span>
+            <strong><%= @route.pattern %></strong>
+          </a>
+        </li>
+      </ul>
 
-  <div class="well">
-    <div>Params</div>
-    <ul class='col-lg-offset-0'>
-      <% @route.params.each do |key, value| %>
- <li><span class='col-lg-4'><strong><%= key %>:</strong></span><span class='col-lg-8'><%= value %></span></li>
-      <% end unless @route.params.nil? %>
-    </ul>
-  </div>
+      <div class="well">
+        <div>Params</div>
+        <ul class='col-lg-offset-0'>
+          <% @route.params.each do |key, value| %>
+ <    li><span class='col-lg-4'><strong><%= key %>:</strong></span><span class='col-lg-8'><%= value %></span></li>
+          <% end unless @route.params.nil? %>
+        </ul>
+      </div>
 
-  <div id="show-api-response-div" class="well">
-    <ul class="nav nav-tabs">
-      <li class="nav-label">Response</li>
-      <li class="label <%= @route.status.to_s =~ /2\d{2}/ ? 'label-success' : 'label-danger' %>"><%= @route.status %></li>
-    </ul>
-    <pre class="prettyprint" ref="response-json" data-response="<%= @route.response %>">
-     <%= @route.response %>
-    </pre>
-  </div>
-  </div>
+      <div id="show-api-response-div" class="well">
+        <ul class="nav nav-tabs">
+          <li class="nav-label">Response</li>
+          <li class="label <%= @route.status.to_s =~ /2\d{2}/ ? 'label-success' : 'label-danger' %>"><%= @route.status %></li>
+        </ul>
+        <pre class="prettyprint" ref="response-json">
+         <%= @route.response %>
+        </pre>
+      </div>
+    </div>
   </div>
 </div>
