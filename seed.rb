@@ -15,4 +15,4 @@ config['endpoints'].each do |endpoint, options|
 
   ep.save!
 end
-
+p 'ok'

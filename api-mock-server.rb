@@ -1,5 +1,4 @@
 require 'json'
-require 'reloader'
 
 module ApiMockServer
 
@@ -28,7 +27,6 @@ module ApiMockServer
     # for partial
     #binding.pry
     register Sinatra::Partial
-    use Rack::Reloader
 
     configure :development do
       set :partial_template_engine, :erb
@@ -42,6 +40,14 @@ module ApiMockServer
         #config.persist_in_safe_mode = false
       #end
       Mongoid.load!("mongoid.yml")
+    end
+
+    helpers do
+      def restart_server
+        File.open("rerun.rb", "w") do |file|
+          file.write Time.now
+        end
+      end
     end
 
     # remove it
@@ -66,6 +72,7 @@ module ApiMockServer
                                status: params["status"] || 200,
                                response: params["response"],
                                params: ps)
+      restart_server
       erb :show
     end
 
