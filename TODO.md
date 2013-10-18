@@ -6,6 +6,9 @@
 [*] 5. add create new API interface
 [*] 5.3 make new route work need not restart server
 [*] 5.5 add more effect and validates for create API
-[] 6. Add default namespace (mock) for mock server
-[] 7. Add great show for Response
+[*] 7. Add great show for Response
+[] 8. API can modify
+[] 9. default namespace (mock) for mock server
+[] 10. can deploy on server
+[] *. can import API at once
 [] *. add API document export function
