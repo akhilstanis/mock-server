@@ -3,14 +3,14 @@
     <%= partial :api_list, locals: { current: @route } %>
   </div>
 
-  <div id="show-api-div" class="col-md-7">
+  <div id="create-api" class="col-md-7">
     <% if @error.present? %>
       <div class='alert alert-danger'>
         <%= @error.join("<br/>") %>
       </div>
     <% end %>
     <form action="/admin/new", method="post", class="form-horizontal">
-      <div class='form-group well'>
+      <div class='form-group well url'>
         <label class="col-lg-2 control-label">URL</label>
         <div class='col-lg-10 row'>
           <div class='col-lg-4'>
@@ -27,18 +27,23 @@
           </div>
         </div>
       </div>
-      <div class='form-group well'>
+      <div class='operations'>
+        <a href='javascript:void(0)' id='show-params'>设置参数</a>
+        <a href='javascript:void(0)' id='show-status'>设置返回码</a>
+      </div>
+      <div class='form-group well params' style='display: none'>
         <label class='col-lg-2 control-label'>Parameters</label>
-        <div class='col-lg-10'>
+        <div class='col-lg-10 params-value'>
           <div class='col-lg-4'>
             <input type="text" placeholder="NAME" class="form-control" name="params_key[]"></input>
           </div>
-          <div class='col-lg-8'>
+          <div class='col-lg-7'>
             <input type="text" placeholder="VALUE" class="form-control" name="params_value[]"></input>
           </div>
+          <a href='javascript:void(0)' id='add-params'>添加</a>
         </div>
       </div>
-      <div class="form-group well">
+      <div class="form-group well status" style='display: none'>
         <label class='col-lg-2 control-label'>STATUS</label>
         <div class='col-lg-3'>
           <input type='text' placeholder='200' class='form-control' name='status' value='<%= @route.status %>'>
