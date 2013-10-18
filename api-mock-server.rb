@@ -18,6 +18,15 @@ module ApiMockServer
     validates_format_of :pattern, with: /\A\/\S*\Z/, message: "必须为 / 开头的合法 url"
     validates_uniqueness_of :pattern, scope: [:verb], message: "和 verbs 该组合已经存在"
 
+    def self.init_endpoint args
+      ps ||= {}
+      (args["params_key"]||[]).each_with_index do |params_name, index|
+        ps[params_name] = args["params_value"][index]
+      end
+      ps = ps.delete_if {|k, v| k.blank? }
+      new(args.extract!(:verb, :pattern, :response, :status).merge(params: ps))
+    end
+
   end
 
   class App < Sinatra::Base
@@ -50,15 +59,12 @@ module ApiMockServer
     end
 
     post "/admin/new" do
-      ps ||= {}
-      params["params_key"].each_with_index do |params_name, index|
-        ps[params_name] = params["params_value"][index]
-      end
-      @route = Endpoint.new(verb: params["verb"],
+      @route = Endpoint.init_endpoint(verb: params["verb"],
                             pattern: params["pattern"],
                             status: params["status"].blank? ? 200 : params["status"].to_i,
                             response: params["response"],
-                            params: ps)
+                            params_key: params["params_key"],
+                            params_value: params["params_value"])
       if @route.save
         restart_server
         erb :show
