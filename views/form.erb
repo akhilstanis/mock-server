@@ -1,0 +1,71 @@
+<form action="<%= from == 'new' ? '/admin/new' : '/admin/' + @route.id + '/edit' %>", method="post", class="form-horizontal">
+  <% if @error.present? %>
+    <div class='alert alert-danger'>
+      <%= @error.join("<br/>") %>
+    </div>
+  <% end %>
+  <div class='form-group well url'>
+    <label class="col-lg-2 control-label">URL</label>
+    <div class='col-lg-10 row'>
+      <div class='col-lg-4'>
+        <select class='form-control' name="route[verb]">
+          <% p @route.verb, @route.pattern, @route.status, @route.response, @route.params %>
+          <option value='' <%= @route.verb? ? "" : "selected" %>>SELECT VERB</option>
+          <% ApiMockServer::Endpoint::VALID_HTTP_VERBS.each do |verb| %>
+            <option value='<%= verb %>' <%= @route.verb == verb ? "selected" : "" %> ><%= verb.upcase %></option>
+          <% end %>
+        </select>
+      </div>
+      <div class='col-lg-8'>
+        <input type="text" placeholder="URL" class='form-control' name="route[pattern]" value='<%= @route.pattern %>'></input>
+      </div>
+    </div>
+  </div>
+  <div class='operations'>
+    <a href='javascript:void(0)' id='show-params'>设置参数</a>
+    <a href='javascript:void(0)' id='show-status'>设置返回码</a>
+  </div>
+  <div class='form-group well params' style='<%= @route.params && !@route.params.empty? ? "" : "display: none" %>'>
+    <label class='col-lg-2 control-label'>Parameters</label>
+    <div class='col-lg-10 params-value'>
+      <% if from == 'new' %>
+        <div class='col-lg-4'>
+          <input type="text" placeholder="NAME" class="form-control" name="route[params_key][]"></input>
+        </div>
+        <div class='col-lg-7'>
+          <input type="text" placeholder="VALUE" class="form-control" name="route[params_value][]"></input>
+        </div>
+      <% else %>
+        <% @route.params.each do |key, value| %>
+          <div class='col-lg-4'>
+            <input type="text" placeholder="NAME" class="form-control" name="route[params_key][]" value="<%= key %>"></input>
+          </div>
+          <div class='col-lg-7'>
+            <input type="text" placeholder="VALUE" class="form-control" name="route[params_value][]" value="<%= key %>"></input>
+          </div>
+        <% end %>
+      <% end %>
+      <a href='javascript:void(0)' id='add-params'>添加</a>
+    </div>
+  </div>
+  <div class="form-group well status" style='<%= @route.status && @route.status != 200 ? "" : "display: none" %>'>
+    <label class='col-lg-2 control-label'>STATUS</label>
+    <div class='col-lg-3'>
+      <input type='text' placeholder='200' class='form-control' name='route[status]' value='<%= @route.status %>'>
+    </div>
+  </div>
+  <div class="form-group well">
+    <label class='col-lg-2 control-label'>Response</label>
+    <div class='col-lg-10'>
+      <textarea placeholder='ONLY SUPPORT JSON FORMAT' class='prettyprint form-control' cols='10' rows='20' name="route[response]">
+        <%= @route.response %>
+      </textarea>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-lg-offset-2 col-lg-10">
+      <button type="submit" class="btn btn-primary">创建这个 API</button>
+    </div>
+  </div>
+</form>

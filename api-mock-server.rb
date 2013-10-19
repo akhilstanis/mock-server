@@ -19,12 +19,31 @@ module ApiMockServer
     validates_uniqueness_of :pattern, scope: [:verb], message: "和 verbs 该组合已经存在"
 
     def self.init_endpoint args
+      args, ps = fixed_args args
+      args = args.merge(params: ps)
+      new(args)
+    end
+
+    def update_endpoint args
+      args, ps = fixed_args args
+      args = args.merge(params: ps) unless ps.empty?
+      update_attributes(args)
+    end
+
+    private
+    def self.fixed_args args
       ps ||= {}
       (args["params_key"]||[]).each_with_index do |params_name, index|
         ps[params_name] = args["params_value"][index]
       end
       ps = ps.delete_if {|k, v| k.blank? }
-      new(args.extract!(:verb, :pattern, :response, :status).merge(params: ps))
+      args["status"] = args["status"].blank? ? 200 : args["status"].to_i
+      args = args.extract!("verb", "pattern", "response", "status")
+      return args, ps
+    end
+
+    def fixed_args args
+      self.class.fixed_args args
     end
 
   end
@@ -59,18 +78,28 @@ module ApiMockServer
     end
 
     post "/admin/new" do
-      @route = Endpoint.init_endpoint(verb: params["verb"],
-                            pattern: params["pattern"],
-                            status: params["status"].blank? ? 200 : params["status"].to_i,
-                            response: params["response"],
-                            params_key: params["params_key"],
-                            params_value: params["params_value"])
+      @route = Endpoint.init_endpoint(params["route"])
       if @route.save
         restart_server
         erb :show
       else
         @error = @route.errors.full_messages
         erb :new
+      end
+    end
+
+    get "/admin/:id/edit" do
+      @route = Endpoint.find(params[:id])
+      erb :edit
+    end
+
+    post "/admin/:id/edit" do
+      @route = Endpoint.find(params[:id])
+      if @route.update_endpoint(params[:route])
+        erb :show
+      else
+        @error = @route.errors.full_messages
+        erb :edit
       end
     end
 

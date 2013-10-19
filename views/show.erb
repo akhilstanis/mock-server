@@ -12,6 +12,7 @@
             <strong><%= @route.pattern %></strong>
           </a>
         </li>
+          <div class='pull-right'><a href='/admin/<%= @route.id %>/edit'>编辑</a></div>
       </ul>
 
       <% if @route.params && !@route.params.empty? %>
