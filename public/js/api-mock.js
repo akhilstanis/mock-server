@@ -16,4 +16,12 @@ jQuery(function($) {
           "class='form-control' name='route[params_value][]'></div>");
   })
 
+  $(".delete").click(function(e) {
+    e.preventDefault();
+    $.post($(this).href, {_method: "delete"}, function(response){
+      alert(response.error);
+      document.location = response.url;
+    })
+  })
+
 })

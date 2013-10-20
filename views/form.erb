@@ -9,7 +9,6 @@
     <div class='col-lg-10 row'>
       <div class='col-lg-4'>
         <select class='form-control' name="route[verb]">
-          <% p @route.verb, @route.pattern, @route.status, @route.response, @route.params %>
           <option value='' <%= @route.verb? ? "" : "selected" %>>SELECT VERB</option>
           <% ApiMockServer::Endpoint::VALID_HTTP_VERBS.each do |verb| %>
             <option value='<%= verb %>' <%= @route.verb == verb ? "selected" : "" %> ><%= verb.upcase %></option>
@@ -36,7 +35,7 @@
           <input type="text" placeholder="VALUE" class="form-control" name="route[params_value][]"></input>
         </div>
       <% else %>
-        <% @route.params.each do |key, value| %>
+        <% (@route.params||[]).each do |key, value| %>
           <div class='col-lg-4'>
             <input type="text" placeholder="NAME" class="form-control" name="route[params_key][]" value="<%= key %>"></input>
           </div>
@@ -65,7 +64,9 @@
 
   <div class="form-group">
     <div class="col-lg-offset-2 col-lg-10">
-      <button type="submit" class="btn btn-primary">创建这个 API</button>
+      <button type="submit" class="btn btn-primary">
+        <%= from == 'new' ? '创建' : '更新' %>这个 API
+      </button>
     </div>
   </div>
 </form>

@@ -12,7 +12,13 @@
             <strong><%= @route.pattern %></strong>
           </a>
         </li>
-          <div class='pull-right'><a href='/admin/<%= @route.id %>/edit'>编辑</a></div>
+          <div class='pull-right dropdown'>
+           <a href='javascript:void(0)' class="dropdown-toggle" data-toggle="dropdown">操作<b class="caret"></b></a>
+           <div class='dropdown-menu'>
+             <li><a href='/admin/<%= @route.id %>/edit'>编辑</a></li>
+             <li><a href='/admin/<%= @route.id %>' class='delete'>删除</a></li>
+           </div>
+           </div>
       </ul>
 
       <% if @route.params && !@route.params.empty? %>

@@ -12,7 +12,5 @@ config['endpoints'].each do |endpoint, options|
                                status: (options['status']||200).to_i,
                                params: options['params'])
 
-  p ep
   ep.save!
 end
-p 'ok'

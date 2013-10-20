@@ -50,6 +50,7 @@ module ApiMockServer
 
   class App < Sinatra::Base
     register Sinatra::Partial
+    use Rack::MethodOverride
 
     configure :development do
       set :partial_template_engine, :erb
@@ -103,23 +104,28 @@ module ApiMockServer
       end
     end
 
+    delete "/admin/:id" do
+      content_type :json
+      @route = Endpoint.find(params[:id])
+      if @route.destroy
+        {error: '删除成功', url: '/admin'}.to_json
+      else
+        {error: @route.errors.full_messages.join(", "), url: '/admin'+params[:id]}.to_json
+      end
+    end
+
     get "/admin/:id" do
       @route = Endpoint.find params[:id]
       erb :show
     end
 
-    #binding.pry
-    #use ApiAPP
     Endpoint.each do |endpoint|
-      p endpoint
-      #binding.pry
       send(endpoint.verb, endpoint.pattern) do
         content_type :json
         status endpoint.status
         endpoint.response
       end
     end
-    #binding.pry
   end
 
 end

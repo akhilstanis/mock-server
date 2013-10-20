@@ -1,31 +1,48 @@
 # Mock API Server
 
-A simple mock API server written in ruby. Just configure the endpoints in the config yaml file and start the server.
+A Fully Functional API Mock Server
 
 ## Installation
 
+### Install Mongodb
+
+   [Install MongoDB](http://docs.mongodb.org/manual/installation/)
+
+### Clone the Project
+
+    git clone git@github.com:zlx/API-mock-server.git
+
+### Install Dependancy
+
     bundle install --path=vendor/bundle
 
+
 ## Usage
-A sample config yaml looks like below:
 
+### Mongodb Config
 
-    endpoints:
-      '/':
-        method:   'GET'
-        response: '{"hello": "world"}'
+Configurate mongodb in mongoid.yml like below:
+   
+    development:
+      sessions:
+        default:
+          database: api_mock_server
+          hosts: 
+            - localhost:27017
 
-      '/user':
-        method:   'GET'
-        response: '{"hello": "user"}'
+### Start Server
 
-The server is a simple sinatra app, so simply run mock-server.rb using ruby
+    bundle exec rerun "bundle exec rackup -p 4000"
 
-    bundle exec ruby mock-server.rb
+### Visit
+
+    http://localhost:4000/admin
+
+## Test
 
 Test the service using a curl or your favourite tool
 
-    curl http://localhost:4567
+    curl http://localhost:4000
     { "hello": "world" }
 
 

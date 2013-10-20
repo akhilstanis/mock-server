@@ -7,9 +7,9 @@
 - [x] 5.3 make new route work need not restart server
 - [x] 5.5 add more effect and validates for create API
 - [x] 7. Add great show for Response
-- [] 8. API can modify
-- [] 9. default namespace (mock) for mock server
-- [] 10. can deploy on server(tag 1.0)
+- [x] 8. API can modify
+- [x] 9. default namespace (mock) for mock server
+- [x] 10. can deploy on server(tag 1.0)
 
 
 - [] 11. manual restart server
