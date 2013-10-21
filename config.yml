@@ -1,0 +1,22 @@
+
+endpoints:
+  '/':
+    verb:   'GET'
+    response: '{"hello": "world"}'
+
+  '/user':
+    verb:   'GET'
+    response: '{"hello": "user"}'
+  
+  '/users/*':
+    verb: 'GET'
+    response: '{"oooooo": "users"}'
+    status: 404
+
+  '/users':
+    verb: 'POST'
+    response: '{"success": true}'
+    params:
+      username: 'lianxin'
+      password: 'password'
+
