@@ -45,4 +45,8 @@ Test the service using a curl or your favourite tool
     curl http://localhost:4000
     { "hello": "world" }
 
+## Deploy on Server
 
+### work with unicorn
+
+    http://recipes.sinatrarb.com/p/deployment/nginx_proxied_to_unicorn
