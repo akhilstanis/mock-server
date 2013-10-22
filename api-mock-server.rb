@@ -11,13 +11,14 @@ module ApiMockServer
     field :response, type: String
     field :status, type: Integer
     field :params, type: Hash
+    field :active, type: Boolean, default: true
 
     VALID_HTTP_VERBS = %w{get post put delete patch}
 
     validates_presence_of :response, :status, message: "不能为空"
     validates_inclusion_of :verb, in: VALID_HTTP_VERBS , message: "目前只支持以下方法: #{VALID_HTTP_VERBS.join(", ")}"
     validates_format_of :pattern, with: /\A\/\S*\Z/, message: "必须为 / 开头的合法 url"
-    validates_uniqueness_of :pattern, scope: [:verb], message: "和 verbs 该组合已经存在"
+    #validates_uniqueness_of :pattern, scope: [:verb], message: "和 verbs 该组合已经存在"
 
     def self.init_endpoint args
       args, ps = fixed_args args
@@ -39,7 +40,8 @@ module ApiMockServer
       end
       ps = ps.delete_if {|k, v| k.blank? }
       args["status"] = args["status"].blank? ? 200 : args["status"].to_i
-      args = args.extract!("verb", "pattern", "response", "status")
+      args["active"] = !args["active"].nil?
+      args = args.extract!("verb", "pattern", "response", "status", "active")
       return args, ps
     end
 
@@ -113,7 +115,7 @@ module ApiMockServer
 
     VALID_HTTP_VERBS.each do |verb|
       send verb, "*" do
-        @route = Endpoint.where(verb: verb, pattern: params["splat"].first).first
+        @route = Endpoint.where(verb: verb, pattern: params["splat"].first, active: true).first
         if @route
           content_type :json
           status @route.status

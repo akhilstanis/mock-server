@@ -24,13 +24,13 @@
       <% if @route.params && !@route.params.empty? %>
         <div class="well">
           <div>Params</div>
-            <div class='col-lg-offset-1'>
+            <div class='col-md-offset-1'>
               <% @route.params.each do |key, value| %>
                 <div class='row'>
-                  <div class='col-lg-4'>
+                  <div class='col-md-4'>
                     <strong><%= key %>:</strong>
                   </div>
-                  <div class='col-lg-8'>
+                  <div class='col-md-8'>
                     <%= value %>
                   </div>
                 </div>
