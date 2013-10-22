@@ -1,3 +1,4 @@
 .bundle/
 vendor/bundle
 mongoid.yml
+unicorn.rb

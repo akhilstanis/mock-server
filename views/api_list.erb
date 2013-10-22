@@ -6,7 +6,7 @@
         <div class="label-api label-api-full">
           <span class="label label-danger"><%= endpoint.verb.upcase %></span>
           <strong><%= endpoint.pattern %></strong>
-          <% if endpoint.active? %>
+          <% if endpoint.active %>
             <span class='label label-success'>启用中</span>
           <% else %>
             <span class='label label-warning'>未启用</span>
