@@ -1,6 +1,6 @@
 <div class="div-container">
   <ul class="well nav nav-pills nav-stacked">
-    <% ::ApiMockServer::Endpoint.each do |endpoint| %>
+    <% ::ApiMockServer::Endpoint.asc(:pattern).each do |endpoint| %>
       <li class="<%= endpoint == current ? 'active' : '' %>">
       <a href="/admin/<%= endpoint.id %>">
         <div class="label-api label-api-full">
