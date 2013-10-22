@@ -58,14 +58,6 @@ module ApiMockServer
       Mongoid.load!("mongoid.yml")
     end
 
-    helpers do
-      def restart_server
-        File.open("rerun.rb", "w") do |file|
-          file.write Time.now
-        end
-      end
-    end
-
     # remove it
     require 'seed'
 
@@ -81,7 +73,6 @@ module ApiMockServer
     post "/admin/new" do
       @route = Endpoint.init_endpoint(params["route"])
       if @route.save
-        restart_server
         erb :show
       else
         @error = @route.errors.full_messages
@@ -119,13 +110,18 @@ module ApiMockServer
       erb :show
     end
 
-    Endpoint.each do |endpoint|
-      send(endpoint.verb, endpoint.pattern) do
-        content_type :json
-        status endpoint.status
-        endpoint.response
+    VALID_HTTP_VERBS.each do |verb|
+      send verb, "*" do
+        @route = Endpoint.where(verb: verb, pattern: params["splat"].first).first
+        if @route
+          content_type :json
+          status @route.status
+          @route.response
+        else
+          {error: "the route not exist now"}.to_json
+        end
       end
     end
-  end
 
+  end
 end
