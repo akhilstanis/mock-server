@@ -56,7 +56,7 @@
   <div class="form-group well">
     <label class='col-lg-2 control-label'>Response</label>
     <div class='col-lg-10'>
-      <textarea placeholder='ONLY SUPPORT JSON FORMAT' class='prettyprint form-control' cols='10' rows='20' name="route[response]">
+      <textarea placeholder='ONLY SUPPORT JSON FORMAT' id='editor' class='form-control' cols='10' rows='20' name="route[response]">
         <%= @route.response %>
       </textarea>
     </div>
@@ -70,3 +70,10 @@
     </div>
   </div>
 </form>
+<script src="/js/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="/js/mode-json.js" type="text/javascript" charset="utf-8"></script>
+<script>
+  var editor = ace.edit("editor");
+  var JsonMode = require("ace/mode/json").Mode;
+  editor.getSession().setMode(new JsonMode());
+</script>
