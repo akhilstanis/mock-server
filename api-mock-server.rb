@@ -61,19 +61,35 @@ module ApiMockServer
       Mongoid.load!("mongoid.yml")
     end
 
+    helpers do
+      def protected!
+        return if authorized?
+        headers['WWW-Authenticate'] = 'Basic realm="Restricted Area"'
+        halt 401, "Not authorized\n"
+      end
+
+      def authorized?
+        @auth ||=  Rack::Auth::Basic::Request.new(request.env)
+        @auth.provided? and @auth.basic? and @auth.credentials and @auth.credentials == ['admin', 'admin']
+      end
+    end
+
     # remove it
     require 'seed'
 
     get "/admin" do
+      protected!
       erb :index
     end
 
     get "/admin/new" do
+      protected!
       @route = Endpoint.new
       erb :new
     end
 
     post "/admin/new" do
+      protected!
       @route = Endpoint.init_endpoint(params["route"])
       if @route.save
         erb :show
@@ -84,11 +100,13 @@ module ApiMockServer
     end
 
     get "/admin/:id/edit" do
+      protected!
       @route = Endpoint.find(params[:id])
       erb :edit
     end
 
     post "/admin/:id/edit" do
+      protected!
       @route = Endpoint.find(params[:id])
       if @route.update_endpoint(params[:route])
         erb :show
@@ -99,6 +117,7 @@ module ApiMockServer
     end
 
     delete "/admin/:id" do
+      protected!
       content_type :json
       @route = Endpoint.find(params[:id])
       if @route.destroy
@@ -109,6 +128,7 @@ module ApiMockServer
     end
 
     get "/admin/:id" do
+      protected!
       @route = Endpoint.find params[:id]
       erb :show
     end
