@@ -74,9 +74,6 @@ module ApiMockServer
       end
     end
 
-    # remove it
-    require 'seed'
-
     get "/admin" do
       protected!
       erb :index
@@ -133,7 +130,7 @@ module ApiMockServer
       erb :show
     end
 
-    VALID_HTTP_VERBS.each do |verb|
+    ::ApiMockServer::Endpoint::VALID_HTTP_VERBS.each do |verb|
       send verb, "*" do
         @route = Endpoint.where(verb: verb, pattern: params["splat"].first, active: true).first
         if @route
