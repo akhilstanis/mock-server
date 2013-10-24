@@ -40,13 +40,21 @@ Configurate mongodb in mongoid.yml like below:
 
 ## Test
 
-Test the service using a curl or your favourite tool
+### Mock Data
+
+    ruby seed.rb
+
+### Test the service using a curl or your favourite tool
 
     curl http://localhost:4000
     { "hello": "world" }
+
+### Postman
+
+[source code](https://github.com/a85/POSTMan-Chrome-Extension)
 
 ## Deploy on Server
 
 ### work with unicorn
 
-    http://recipes.sinatrarb.com/p/deployment/nginx_proxied_to_unicorn
+[Guide for setup unicorn for rack app](http://recipes.sinatrarb.com/p/deployment/nginx_proxied_to_unicorn)
