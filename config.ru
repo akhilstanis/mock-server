@@ -1,7 +1,3 @@
-require 'bundler/setup'
-Bundler.require(:default)
-
-$: << File.expand_path(".")
-require 'api-mock-server'
+require File.join(File.dirname(__FILE__), 'boot')
 
 run ApiMockServer::App

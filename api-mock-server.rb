@@ -55,7 +55,7 @@ module ApiMockServer
     register Sinatra::Partial
     use Rack::MethodOverride
 
-    configure :development do
+    configure :development, :test do
       set :partial_template_engine, :erb
 
       Mongoid.load!("mongoid.yml")

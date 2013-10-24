@@ -6,4 +6,8 @@ gem "mongoid"
 gem "sinatra-partial"
 
 gem "pry"
-gem 'rerun'
+
+group :test do
+  gem "rspec"
+  gem 'rack-test'
+end

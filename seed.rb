@@ -1,7 +1,5 @@
 require 'yaml'
-require 'bundler/setup'
-Bundler.require(:default)
-require File.join(File.dirname(__FILE__), 'api-mock-server')
+require File.join(File.dirname(__FILE__), 'boot')
 
 config = YAML.load(File.read('config.yml'))
 
