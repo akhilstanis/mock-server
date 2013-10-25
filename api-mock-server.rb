@@ -141,22 +141,20 @@ module ApiMockServer
     end
 
     ::ApiMockServer::Endpoint::VALID_HTTP_VERBS.each do |verb|
-      send verb, "#{::ApiMockServer.top_namespace.to_s}*" do
+      send verb, '*' do
         pattern = params["splat"].first
         if pattern.match(::ApiMockServer.top_namespace.to_s)
-        pattern = pattern.sub(::ApiMockServer.top_namespace.to_s, "")
-        @route = Endpoint.where(verb: verb, pattern: pattern, active: true).first
-        unless @route
-          urls = params["splat"].first.split("/")[1..-2]
-          @route = Endpoint.where(verb: verb, pattern: /^\/#{urls[0]}\/\*/, active: true).first
-        end
-        if @route
-          content_type :json
-          status @route.status
-          @route.response
-        else
-          {error: "the route not exist now"}.to_json
-        end
+          pattern = pattern.sub(::ApiMockServer.top_namespace.to_s, "")
+          @route = Endpoint.where(verb: verb, pattern: pattern, active: true).first
+          unless @route
+            urls = params["splat"].first.split("/")[1..-2]
+            @route = Endpoint.where(verb: verb, pattern: /^\/#{urls[0]}\/\*/, active: true).first
+          end
+          if @route
+            content_type :json
+            status @route.status
+            @route.response
+          end
         else
           {error: "the route not exist now"}.to_json
         end
