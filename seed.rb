@@ -1,7 +1,7 @@
 require 'yaml'
 require File.join(File.dirname(__FILE__), 'boot')
 
-config = YAML.load(File.read('config.yml'))
+config = YAML.load(File.read('seed.yml'))
 
 config['endpoints'].each do |endpoint, options|
   verb = options['verb'].to_s.downcase

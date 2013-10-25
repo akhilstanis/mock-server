@@ -3,6 +3,16 @@ require 'json'
 
 module ApiMockServer
 
+  class << self
+    attr_accessor :top_namespace
+    attr_accessor :admin_user, :admin_password
+
+
+    def setup
+      yield self
+    end
+  end
+
   class Endpoint
     include Mongoid::Document
 
@@ -70,7 +80,7 @@ module ApiMockServer
 
       def authorized?
         @auth ||=  Rack::Auth::Basic::Request.new(request.env)
-        @auth.provided? and @auth.basic? and @auth.credentials and @auth.credentials == ['admin', 'admin']
+        @auth.provided? and @auth.basic? and @auth.credentials and @auth.credentials == [::ApiMockServer.admin_user||'admin', ::ApiMockServer.admin_password||'admin']
       end
     end
 
@@ -131,17 +141,22 @@ module ApiMockServer
     end
 
     ::ApiMockServer::Endpoint::VALID_HTTP_VERBS.each do |verb|
-      send verb, "*" do
-        @route = Endpoint.where(verb: verb, pattern: params["splat"].first, active: true).first
+      send verb, "#{::ApiMockServer.top_namespace.to_s}*" do
+        pattern = params["splat"].first
+        if pattern.match(::ApiMockServer.top_namespace.to_s)
+        pattern = pattern.sub(::ApiMockServer.top_namespace.to_s, "")
+        @route = Endpoint.where(verb: verb, pattern: pattern, active: true).first
         unless @route
           urls = params["splat"].first.split("/")[1..-2]
-          binding.pry
           @route = Endpoint.where(verb: verb, pattern: /^\/#{urls[0]}\/\*/, active: true).first
         end
         if @route
           content_type :json
           status @route.status
           @route.response
+        else
+          {error: "the route not exist now"}.to_json
+        end
         else
           {error: "the route not exist now"}.to_json
         end

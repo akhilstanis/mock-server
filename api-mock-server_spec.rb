@@ -101,4 +101,48 @@ describe ApiMockServer do
     expect(last_response).to be_ok
     expect(last_response.body).to eq route.response
   end
+
+  context "Configurate" do
+    before do
+      ApiMockServer.setup do |config| 
+        config.top_namespace = "/api/v1"
+        config.admin_user = "admin"
+        config.admin_password = 'zlx'
+      end
+    end
+
+    after do
+      ApiMockServer.setup do |config| 
+        config.top_namespace = nil
+        config.admin_user = nil
+        config.admin_password = nil
+      end
+    end
+
+    it "should match top namespace when config" do
+      route = ApiMockServer::Endpoint.create(verb: 'get', pattern: '/me/*', response: '{"me": "*"}', status: 200)
+
+      get "/api/v1#{route.pattern}"
+
+      expect(last_response).to be_ok
+      expect(last_response.body).to eq route.response
+    end
+
+    it "should not match url missing top namespace when config" do
+      route = ApiMockServer::Endpoint.create(verb: 'get', pattern: '/me/*', response: '{"me": "*"}', status: 200)
+
+      get route.pattern
+
+      expect(last_response).to be_ok
+      expect(last_response.body).to eq({error: "the route not exist now"}.to_json)
+    end
+
+    it "should config admin_user and admin_password" do
+      authorize "admin", "zlx"
+
+      get "/admin"
+
+      expect(last_response).to be_ok
+    end
+  end
 end
