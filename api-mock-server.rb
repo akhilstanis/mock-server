@@ -41,7 +41,7 @@ module ApiMockServer
       ps = ps.delete_if {|k, v| k.blank? }
       args["status"] = args["status"].blank? ? 200 : args["status"].to_i
       args["active"] = !args["active"].nil?
-      args = args.extract!("verb", "pattern", "response", "status", "active")
+      args = args.slice("verb", "pattern", "response", "status", "active")
       return args, ps
     end
 
@@ -120,7 +120,7 @@ module ApiMockServer
       if @route.destroy
         {error: '删除成功', url: '/admin'}.to_json
       else
-        {error: @route.errors.full_messages.join(", "), url: '/admin'+params[:id]}.to_json
+        {error: @route.errors.full_messages.join(", "), url: "/admin/#{params[:id]}"}.to_json
       end
     end
 
