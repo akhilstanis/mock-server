@@ -133,6 +133,11 @@ module ApiMockServer
     ::ApiMockServer::Endpoint::VALID_HTTP_VERBS.each do |verb|
       send verb, "*" do
         @route = Endpoint.where(verb: verb, pattern: params["splat"].first, active: true).first
+        unless @route
+          urls = params["splat"].first.split("/")[1..-2]
+          binding.pry
+          @route = Endpoint.where(verb: verb, pattern: /^\/#{urls[0]}\/\*/, active: true).first
+        end
         if @route
           content_type :json
           status @route.status
