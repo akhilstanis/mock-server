@@ -1,9 +1,0 @@
-
-endpoints:
-  '/':
-    method:   'GET'
-    response: '{"hello": "world"}'
-
-  '/user':
-    method:   'GET'
-    response: '{"hello": "user"}'
